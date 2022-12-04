@@ -1,28 +1,37 @@
+#import module for os to create file paths across operating systems
+#import module for reading csv file
 import os
 import csv
 
+#open the file location
 election_csv = os.path.join("PyPoll", "Resources","election_data.csv")
 
+#read the csv data into list
 candidate = []
 unique_cand = []
 cand0 = cand1 = cand2 = 0
 
 with open (election_csv, encoding='utf') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter = ",")
+    
+    #read the header
     csv_header = next(csv_file)
 
     line_count = 0
 
+    #iterate for each row, append the list of candidate
     for row in csv_reader:
 
         line_count += 1
         candidate.append(row[2])
     
+    #identify the unique candidates in the dataset
     for cand in candidate:
 
         if cand not in unique_cand:
             unique_cand.append(cand)
 
+    #calculate the sum of total votes and percentage per vote per candidate
     for i in range(0,line_count):
         if unique_cand[0] == candidate[i]:
             
@@ -39,7 +48,7 @@ with open (election_csv, encoding='utf') as csv_file:
             cand2 += 1
             percand2 = round(((cand2/line_count)*100),3)
     
-    
+    #find the candidate who got maximum votes
     maxvote = max(cand0,cand1,cand2)
     if maxvote == cand0:
         winner = unique_cand[0]
@@ -47,7 +56,8 @@ with open (election_csv, encoding='utf') as csv_file:
         winner = unique_cand[1]
     if maxvote == cand2:
         winner = unique_cand[2]
-
+    
+    #print the results
     print("\n")
     print("Election Results")
     print("-------------------------")
@@ -61,6 +71,7 @@ with open (election_csv, encoding='utf') as csv_file:
     print("-------------------------")
     print("\n")
 
+#write the output into a text file
 output_path = os.path.join("PyPoll", "analysis", "PyPoll_result.txt")
 
 with open(output_path, 'w') as text:
